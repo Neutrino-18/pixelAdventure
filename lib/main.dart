@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Flame.device.fullScreen();
+  //Flame.device.fullScreen();
   Flame.device.setLandscape();
   final game = PixelAdventure();
   runApp(GameWidget(game: kDebugMode ? PixelAdventure() : game));
