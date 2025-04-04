@@ -9,11 +9,11 @@
     ],
     "fileStates": {
         "Level-01.tmx": {
-            "scale": 1.7,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 316.1764705882353,
-                "y": 177.6470588235294
+                "x": 201.375,
+                "y": 263
             }
         },
         "Pixel Adventure.tsx": {
