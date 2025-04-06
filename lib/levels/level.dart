@@ -7,7 +7,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 
 class Level extends World {
   late TiledComponent level;
-  final Player player = Player(character: pinkMan);
+  final Player player = Player(character: ninjaFrog);
   @override
   FutureOr<void> onLoad() async {
     level = await TiledComponent.load('Level-01.tmx', Vector2.all(16));
