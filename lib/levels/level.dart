@@ -6,13 +6,27 @@ import 'package:flame_new/constants/constants.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 class Level extends World {
+  final String levelName;
+  Level({required this.levelName});
   late TiledComponent level;
-  final Player player = Player(character: ninjaFrog);
   @override
   FutureOr<void> onLoad() async {
-    level = await TiledComponent.load('Level-01.tmx', Vector2.all(16));
+    level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
     add(level);
-    add(player);
+    final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
+
+    for (final spawnPoint in spawnPointsLayer!.objects) {
+      switch (spawnPoint.class_) {
+        case 'Player':
+          final player = Player(
+            character: maskDude,
+            position: Vector2(spawnPoint.x, spawnPoint.y),
+          );
+          add(player);
+          break;
+        default:
+      }
+    }
 
     return super.onLoad();
   }
