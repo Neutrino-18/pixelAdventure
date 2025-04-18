@@ -17,6 +17,7 @@ class Player extends SpriteAnimationGroupComponent
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   final double idleTime = 0.05;
+  bool isfacingRight = true;
 
   PlayerDirection playerDirection = PlayerDirection.none;
   double moveSpeed = 100;
@@ -31,6 +32,27 @@ class Player extends SpriteAnimationGroupComponent
   void update(double dt) {
     _updatePlayerMovement(dt);
     super.update(dt);
+  }
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isLeftKeyPressed =
+        keysPressed.contains(LogicalKeyboardKey.keyA) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed =
+        keysPressed.contains(LogicalKeyboardKey.keyD) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowRight);
+
+    if (isLeftKeyPressed && isRightKeyPressed) {
+      playerDirection = PlayerDirection.none;
+    } else if (isLeftKeyPressed) {
+      playerDirection = PlayerDirection.left;
+    } else if (isRightKeyPressed) {
+      playerDirection = PlayerDirection.right;
+    } else {
+      playerDirection = PlayerDirection.none;
+    }
+    return super.onKeyEvent(event, keysPressed);
   }
 
   void _loadAllAnimations() {
@@ -66,10 +88,18 @@ class Player extends SpriteAnimationGroupComponent
     double dirX = 0.0;
     switch (playerDirection) {
       case PlayerDirection.left:
+        if (isfacingRight) {
+          flipHorizontallyAroundCenter();
+          isfacingRight = false;
+        }
         dirX -= moveSpeed;
         current = PlayerState.running;
         break;
       case PlayerDirection.right:
+        if (!isfacingRight) {
+          flipHorizontallyAroundCenter();
+          isfacingRight = true;
+        }
         dirX += moveSpeed;
         current = PlayerState.running;
         break;
