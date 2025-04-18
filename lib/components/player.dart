@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame_new/components/collision_block.dart';
 import 'package:flame_new/constants.dart';
 import 'package:flame_new/pixel_adventure.dart';
 import 'package:flutter/services.dart';
@@ -17,17 +18,20 @@ class Player extends SpriteAnimationGroupComponent
   late final SpriteAnimation runningAnimation;
   final double idleTime = 0.05;
   double horizontalMovement = 0;
+  List<CollisionBlock> collisionBlocks = [];
 
   double moveSpeed = 150;
   Vector2 velocity = Vector2.zero();
   @override
   FutureOr<void> onLoad() {
+    debugMode = true;
     _loadAllAnimations();
     return super.onLoad();
   }
 
   @override
   void update(double dt) {
+    _checkHorizontalCollisions();
     _updatePlayerState();
     _updatePlayerMovement(dt);
     super.update(dt);
@@ -98,4 +102,6 @@ class Player extends SpriteAnimationGroupComponent
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
+
+  void _checkHorizontalCollisions() {}
 }
