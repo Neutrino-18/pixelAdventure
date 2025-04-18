@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame_new/actors/player.dart';
-import 'package:flame_new/constants/constants.dart';
-import 'package:flame_new/levels/level.dart';
+import 'package:flame_new/components/player.dart';
+import 'package:flame_new/constants.dart';
+import 'package:flame_new/components/level.dart';
 import 'package:flutter/painting.dart';
 
 class PixelAdventure extends FlameGame
@@ -22,7 +21,7 @@ class PixelAdventure extends FlameGame
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
-    final worldd = Level(levelName: level2, player: player);
+    final worldd = Level(levelName: level1, player: player);
     cam = CameraComponent.withFixedResolution(
       width: 650,
       height: 360,
@@ -61,15 +60,15 @@ class PixelAdventure extends FlameGame
       case JoystickDirection.left:
       case JoystickDirection.upLeft:
       case JoystickDirection.downLeft:
-        player.playerDirection = PlayerDirection.left;
+        // player.playerDirection = PlayerDirection.left;
         break;
       case JoystickDirection.right:
       case JoystickDirection.upRight:
       case JoystickDirection.downRight:
-        player.playerDirection = PlayerDirection.right;
+        // player.playerDirection = PlayerDirection.right;
         break;
       default:
-        player.playerDirection = PlayerDirection.none;
+      // player.playerDirection = PlayerDirection.none;
     }
   }
 }

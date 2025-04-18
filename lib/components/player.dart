@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame_new/constants/constants.dart';
+import 'package:flame_new/constants.dart';
 import 'package:flame_new/pixel_adventure.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter/src/services/hardware_keyboard.dart';
 // import 'package:flutter/src/services/keyboard_key.g.dart';
 
 enum PlayerState { idle, running }
-
-enum PlayerDirection { left, right, none }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler {
@@ -18,10 +16,9 @@ class Player extends SpriteAnimationGroupComponent
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   final double idleTime = 0.05;
-  bool isfacingRight = true;
+  double horizontalMovement = 0;
 
-  PlayerDirection playerDirection = PlayerDirection.none;
-  double moveSpeed = 100;
+  double moveSpeed = 150;
   Vector2 velocity = Vector2.zero();
   @override
   FutureOr<void> onLoad() {
@@ -31,12 +28,15 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
+    _updatePlayerState();
     _updatePlayerMovement(dt);
     super.update(dt);
   }
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    horizontalMovement = 0;
+
     final isLeftKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyA) ||
         keysPressed.contains(LogicalKeyboardKey.arrowLeft);
@@ -44,15 +44,9 @@ class Player extends SpriteAnimationGroupComponent
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
-    if (isLeftKeyPressed && isRightKeyPressed) {
-      playerDirection = PlayerDirection.none;
-    } else if (isLeftKeyPressed) {
-      playerDirection = PlayerDirection.left;
-    } else if (isRightKeyPressed) {
-      playerDirection = PlayerDirection.right;
-    } else {
-      playerDirection = PlayerDirection.none;
-    }
+    horizontalMovement += isLeftKeyPressed ? -1 : 0;
+    horizontalMovement += isRightKeyPressed ? 1 : 0;
+
     return super.onKeyEvent(event, keysPressed);
   }
 
@@ -85,30 +79,23 @@ class Player extends SpriteAnimationGroupComponent
     );
   }
 
-  void _updatePlayerMovement(double dt) {
-    double dirX = 0.0;
-    switch (playerDirection) {
-      case PlayerDirection.left:
-        if (isfacingRight) {
-          flipHorizontallyAroundCenter();
-          isfacingRight = false;
-        }
-        dirX -= moveSpeed;
-        current = PlayerState.running;
-        break;
-      case PlayerDirection.right:
-        if (!isfacingRight) {
-          flipHorizontallyAroundCenter();
-          isfacingRight = true;
-        }
-        dirX += moveSpeed;
-        current = PlayerState.running;
-        break;
-      default:
-        current = PlayerState.idle;
+  void _updatePlayerState() {
+    PlayerState playerState = PlayerState.idle;
+    if (velocity.x < 0 && scale.x > 0) {
+      flipHorizontallyAroundCenter();
+    } else if (velocity.x > 0 && scale.x < 0) {
+      flipHorizontallyAroundCenter();
     }
 
-    velocity = Vector2(dirX, 0.0);
-    position += velocity * dt;
+    //check if moving, set running
+    if (velocity.x > 0 || velocity.x < 0) {
+      playerState = PlayerState.running;
+    }
+    current = playerState;
+  }
+
+  void _updatePlayerMovement(double dt) {
+    velocity.x = horizontalMovement * moveSpeed;
+    position.x += velocity.x * dt;
   }
 }

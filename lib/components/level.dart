@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame_new/actors/player.dart';
+import 'package:flame_new/components/player.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 class Level extends World {
