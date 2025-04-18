@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame_new/constants/constants.dart';
 import 'package:flame_new/pixel_adventure.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter/src/services/hardware_keyboard.dart';
@@ -13,7 +14,7 @@ enum PlayerDirection { left, right, none }
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler {
   final String character;
-  Player({super.position, required this.character});
+  Player({super.position, this.character = ninjaFrog});
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   final double idleTime = 0.05;
@@ -103,10 +104,8 @@ class Player extends SpriteAnimationGroupComponent
         dirX += moveSpeed;
         current = PlayerState.running;
         break;
-      case PlayerDirection.none:
-        current = PlayerState.idle;
-        break;
       default:
+        current = PlayerState.idle;
     }
 
     velocity = Vector2(dirX, 0.0);
