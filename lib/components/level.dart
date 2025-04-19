@@ -9,8 +9,10 @@ class Level extends World {
   final Player player;
   final String levelName;
   Level({required this.levelName, required this.player});
+  // class specifics
   late TiledComponent level;
   List<CollisionBlock> collisionBlocks = [];
+
   @override
   FutureOr<void> onLoad() async {
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
