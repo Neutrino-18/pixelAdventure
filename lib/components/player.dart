@@ -18,7 +18,7 @@ class Player extends SpriteAnimationGroupComponent
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   final double idleTime = 0.05;
-  double horizontalMovement = 0;
+  double horizontalDirection = 0;
   List<CollisionBlock> collisionBlocks = [];
 
   double moveSpeed = 150;
@@ -40,7 +40,7 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    horizontalMovement = 0;
+    horizontalDirection = 0;
 
     final isLeftKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyA) ||
@@ -49,8 +49,8 @@ class Player extends SpriteAnimationGroupComponent
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
-    horizontalMovement += isLeftKeyPressed ? -1 : 0;
-    horizontalMovement += isRightKeyPressed ? 1 : 0;
+    horizontalDirection += isLeftKeyPressed ? -1 : 0;
+    horizontalDirection += isRightKeyPressed ? 1 : 0;
 
     return super.onKeyEvent(event, keysPressed);
   }
@@ -100,7 +100,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _updatePlayerMovement(double dt) {
-    velocity.x = horizontalMovement * moveSpeed;
+    velocity.x = horizontalDirection * moveSpeed;
     position.x += velocity.x * dt;
   }
 
@@ -112,6 +112,10 @@ class Player extends SpriteAnimationGroupComponent
           if (velocity.x > 0) {
             velocity.x = 0;
             position.x = block.x - width;
+          }
+          if (velocity.x < 0) {
+            velocity.x = 0;
+            position.x = block.x + block.width + width;
           }
         }
       }
