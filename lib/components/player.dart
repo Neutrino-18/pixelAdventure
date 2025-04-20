@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 // import 'package:flutter/src/services/hardware_keyboard.dart';
 // import 'package:flutter/src/services/keyboard_key.g.dart';
 
-enum PlayerState { idle, running }
+enum PlayerState { idle, running, jumping, falling }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler {
@@ -17,6 +17,9 @@ class Player extends SpriteAnimationGroupComponent
   Player({super.position, this.character = ninjaFrog});
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
+  late final SpriteAnimation jumpingAnimation;
+  late final SpriteAnimation fallingAnimation;
+
   //
   final double idleTime = 0.05;
   double horizontalDirection = 0;
@@ -70,17 +73,20 @@ class Player extends SpriteAnimationGroupComponent
 
   void _loadAllAnimations() {
     idleAnimation = _spriteAnimation(state: "Idle", amount: 11);
-
     runningAnimation = _spriteAnimation(state: "Run", amount: 12);
+    jumpingAnimation = _spriteAnimation(state: "Jump", amount: 1);
+    fallingAnimation = _spriteAnimation(state: "Fall", amount: 1);
 
     // List of all animations
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.running: runningAnimation,
+      PlayerState.jumping: jumpingAnimation,
+      PlayerState.falling: fallingAnimation,
     };
 
     // Set current animation
-    current = PlayerState.running;
+    current = PlayerState.idle;
   }
 
   SpriteAnimation _spriteAnimation({
@@ -106,9 +112,12 @@ class Player extends SpriteAnimationGroupComponent
     }
 
     //check if moving, set running
-    if (velocity.x > 0 || velocity.x < 0) {
-      playerState = PlayerState.running;
-    }
+    if (velocity.x > 0 || velocity.x < 0) playerState = PlayerState.running;
+
+    if (velocity.y > _gravity) playerState = PlayerState.falling;
+
+    if (velocity.y < 0) playerState = PlayerState.jumping;
+
     current = playerState;
   }
 
@@ -116,7 +125,7 @@ class Player extends SpriteAnimationGroupComponent
     if (hasJumped && isOnGround) {
       _playerJump(dt);
     }
-    if (velocity.y > _gravity) isOnGround = false;
+    // if (velocity.y > _gravity) isOnGround = false;
 
     velocity.x = horizontalDirection * moveSpeed;
     position.x += velocity.x * dt;
