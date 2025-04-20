@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_new/components/collision_block.dart';
+import 'package:flame_new/components/player_hitbox.dart';
 import 'package:flame_new/components/utils.dart';
 import 'package:flame_new/constants.dart';
 import 'package:flame_new/pixel_adventure.dart';
@@ -35,10 +37,23 @@ class Player extends SpriteAnimationGroupComponent
   final double _jumpForce = 320;
   final double _terminalVelocity = 300;
   //
+  PlayerHitbox hitbox = PlayerHitbox(
+    offSetX: 10,
+    offSetY: 4,
+    width: 14,
+    height: 28,
+  );
+  //
   @override
   FutureOr<void> onLoad() {
     debugMode = true;
     _loadAllAnimations();
+    add(
+      RectangleHitbox(
+        position: Vector2(hitbox.offSetX, hitbox.offSetY),
+        size: Vector2(hitbox.width, hitbox.height),
+      ),
+    );
     return super.onLoad();
   }
 
@@ -145,12 +160,12 @@ class Player extends SpriteAnimationGroupComponent
         if (checkCollision(this, block)) {
           if (velocity.x > 0) {
             velocity.x = 0;
-            position.x = block.x - width;
+            position.x = block.x - hitbox.offSetX - hitbox.width;
             break;
           }
           if (velocity.x < 0) {
             velocity.x = 0;
-            position.x = block.x + block.width + width;
+            position.x = block.x + block.width + hitbox.offSetX + hitbox.width;
             break;
           }
         }
