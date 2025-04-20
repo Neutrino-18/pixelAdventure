@@ -46,7 +46,7 @@ class Player extends SpriteAnimationGroupComponent
   //
   @override
   FutureOr<void> onLoad() {
-    debugMode = true;
+    //debugMode = true;
     _loadAllAnimations();
     add(
       RectangleHitbox(
@@ -185,7 +185,7 @@ class Player extends SpriteAnimationGroupComponent
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
             velocity.y = 0;
-            position.y = block.y - width;
+            position.y = block.y - hitbox.offSetY - hitbox.height;
             isOnGround = true;
             break;
           }
@@ -194,13 +194,13 @@ class Player extends SpriteAnimationGroupComponent
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
             velocity.y = 0;
-            position.y = block.y - height;
+            position.y = block.y - hitbox.offSetY - hitbox.height;
             isOnGround = true;
             break;
           }
           if (velocity.y < 0) {
             velocity.y = 0;
-            position.y = block.y + block.height;
+            position.y = block.y + block.height - hitbox.offSetY;
             break;
           }
         }
