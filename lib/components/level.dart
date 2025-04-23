@@ -38,7 +38,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
       final backgroundColor = backgroundLayer.properties.getValue(
         'BackgroundColor',
       );
-      for (double y = 0; y < numTileY; y++) {
+      for (double y = 0; y < game.size.y / numTileY; y++) {
         for (double x = 0; x < numTileX; x++) {
           final backgroundTile = BackgroundTile(
             color: backgroundColor ?? 'Gray',
