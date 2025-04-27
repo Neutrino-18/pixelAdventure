@@ -4,6 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_new/components/collision_block.dart';
 import 'package:flame_new/components/custom_hitbox.dart';
+import 'package:flame_new/components/fruit.dart';
 import 'package:flame_new/components/utils.dart';
 import 'package:flame_new/constants.dart';
 import 'package:flame_new/pixel_adventure.dart';
@@ -84,6 +85,14 @@ class Player extends SpriteAnimationGroupComponent
     horizontalDirection += isRightKeyPressed ? 1 : 0;
 
     return super.onKeyEvent(event, keysPressed);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Fruit) {
+      other.collidedWithPlayer();
+    }
+    super.onCollision(intersectionPoints, other);
   }
 
   void _loadAllAnimations() {

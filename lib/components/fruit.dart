@@ -9,14 +9,20 @@ class Fruit extends SpriteAnimationComponent
     with HasGameRef<PixelAdventure>, CollisionCallbacks {
   final String fruit;
 
-  Fruit({this.fruit = 'Apple', super.position, super.size});
+  Fruit({
+    this.fruit = 'Apple',
+    super.position,
+    super.size,
+    super.removeOnFinish = true,
+  });
 
-  final double stepTIme = 0.1;
+  final double stepTIme = 0.09;
+  bool _collected = false;
   final hitbox = CustomHitbox(offSetX: 10, offSetY: 10, width: 12, height: 12);
 
   @override
   FutureOr<void> onLoad() {
-    debugMode = true;
+    //   debugMode = true;
     priority = -1;
 
     add(
@@ -35,5 +41,20 @@ class Fruit extends SpriteAnimationComponent
       ),
     );
     return super.onLoad();
+  }
+
+  void collidedWithPlayer() {
+    if (!_collected) {
+      animation = SpriteAnimation.fromFrameData(
+        game.images.fromCache('Items/Fruits/Collected.png'),
+        SpriteAnimationData.sequenced(
+          amount: 17,
+          stepTime: stepTIme,
+          textureSize: Vector2.all(32),
+          loop: false,
+        ),
+      );
+      _collected = true;
+    }
   }
 }
