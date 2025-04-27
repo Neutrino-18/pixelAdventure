@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_new/components/collision_block.dart';
-import 'package:flame_new/components/player_hitbox.dart';
+import 'package:flame_new/components/custom_hitbox.dart';
 import 'package:flame_new/components/utils.dart';
 import 'package:flame_new/constants.dart';
 import 'package:flame_new/pixel_adventure.dart';
@@ -14,7 +14,7 @@ import 'package:flutter/services.dart';
 enum PlayerState { idle, running, jumping, falling }
 
 class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, KeyboardHandler {
+    with HasGameRef<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
   final String character;
   Player({super.position, this.character = ninjaFrog});
   late final SpriteAnimation idleAnimation;
@@ -37,7 +37,7 @@ class Player extends SpriteAnimationGroupComponent
   final double _jumpForce = 320;
   final double _terminalVelocity = 300;
   //
-  PlayerHitbox hitbox = PlayerHitbox(
+  CustomHitbox hitbox = CustomHitbox(
     offSetX: 10,
     offSetY: 4,
     width: 14,
