@@ -5,6 +5,7 @@ import 'package:flame_new/components/background_tile.dart';
 import 'package:flame_new/components/collision_block.dart';
 import 'package:flame_new/components/fruit.dart';
 import 'package:flame_new/components/player.dart';
+import 'package:flame_new/components/saw.dart';
 import 'package:flame_new/pixel_adventure.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
@@ -67,6 +68,14 @@ class Level extends World with HasGameRef<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(fruit);
+            break;
+          case 'Saw':
+            final saw = Saw(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(saw);
+            break;
           default:
         }
       }
