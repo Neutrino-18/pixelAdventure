@@ -16,7 +16,7 @@ class Fruit extends SpriteAnimationComponent
     super.removeOnFinish = true,
   });
 
-  final double stepTIme = 0.09;
+  final double stepTIme = 0.05;
   bool _collected = false;
   final hitbox = CustomHitbox(offSetX: 10, offSetY: 10, width: 12, height: 12);
 
