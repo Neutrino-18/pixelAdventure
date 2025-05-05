@@ -22,7 +22,7 @@ class Fruit extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() {
-    //   debugMode = true;
+    // priority shows where the component is located the complete so called "3d-plane" of the 2d scene.
     priority = -1;
 
     add(
